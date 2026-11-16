@@ -20,19 +20,12 @@
 </head>
 <body>
   <div id="splash" class="splash">
-    <div class="splash-bg"><div class="splash-glow"></div><div class="splash-grid"></div><div class="splash-stars"></div></div>
-    <span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><span class="orb o4"></span>
+    <div class="splash-bg"><div class="splash-glow"></div></div>
     <div class="splash-content">
-      <div class="splash-kicker">★ FLIPERAMA · MESA LIVRE ★</div>
-      <div class="marquee-bulbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <h1 class="splash-title"><span class="t-old">OLD</span><span class="t-pin">PINBALL</span></h1>
-      <div class="marquee-bulbs rev"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <p class="splash-sub">O CLÁSSICO DOS FLIPERAMAS</p>
       <button id="intro-button" class="splash-play"><span class="play-ico">▶</span> JOGAR</button>
-      <p class="splash-hint"><span>PRESSIONE</span> <b>ENTER</b> <span>OU TOQUE PARA COMEÇAR</span></p>
-      <div class="splash-facts"><span><b>06</b> MESAS</span><span><b>03</b> BOLAS</span><span><b>01</b> FICHA</span></div>
     </div>
-    <div class="splash-strip"><div class="strip-track"><img src="images/classic.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/neon.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/space.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/ocean.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/jungle.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/volcano.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/classic.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/neon.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/space.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/ocean.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/jungle.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"><img src="images/volcano.png" alt="" onerror="this.onerror=null;this.src=this.src.replace('.png','.jpg')"></div></div>
   </div>
   <div class="app-shell">
     <main id="top" class="main-content">
@@ -49,6 +42,7 @@
         <div class="machine-column">
           <div class="stage-toolbar">
             <button id="home-button" class="tool-btn" type="button" aria-label="Voltar ao início"><span>◀</span> INÍCIO</button>
+            <button id="quality-button" class="tool-btn" type="button" aria-label="Qualidade gráfica"><span>⚙</span> <span id="quality-label">GRÁFICO</span></button>
             <button id="sound-button" class="tool-btn" type="button" aria-label="Ativar ou desativar sons"><span id="sound-icon">🔊</span> <span id="sound-label">SOM</span></button>
           </div>
           <div id="game-stage" class="game-stage">
@@ -86,6 +80,7 @@
             <div id="select-screen" class="overlay-screen hidden select-screen">
               <div class="select-wrap">
                 <div class="panel-kicker"><span></span> ESCOLHA SUA MESA</div>
+                <button class="back-button home-top" data-action="home"><span>⌂ TELA INICIAL</span></button>
                 <h2 class="select-title">OLD <em>PINBALL</em></h2>
                 <div id="table-cards" class="table-cards"></div>
               </div>
@@ -101,6 +96,7 @@
                   <span><b>03</b> BOLAS</span><span><b>01</b> MESA</span><span><b>∞</b> DIVERSÃO</span>
                 </div>
                 <div class="theme-row"><div class="theme-name"></div></div>
+                <button class="back-button" data-action="home"><span>⌂ TELA INICIAL</span></button>
                 <button class="back-button" data-action="select"><span>◀ TROCAR MESA</span></button>
                 <button id="coin-button" class="coin-button"><span>ADICIONAR FICHA</span><b>●</b></button>
                 <button id="start-button" class="primary-button locked"><span>INICIAR JOGO</span><b>↗</b></button>
@@ -113,6 +109,7 @@
               <div class="overlay-panel compact-panel">
                 <div class="panel-kicker"><span></span> JOGO PAUSADO</div>
                 <h2>RESPIRE<br /><em>UM POUCO.</em></h2>
+                <button class="back-button" data-action="home"><span>⌂ TELA INICIAL</span></button>
                 <button id="resume-button" class="primary-button"><span>CONTINUAR</span><b>↗</b></button>
                 <p class="panel-hint">PRESSIONE P OU ESC PARA CONTINUAR</p>
               </div>
@@ -125,6 +122,7 @@
                 <p class="final-score-label">PONTUAÇÃO FINAL</p>
                 <strong id="final-score" class="final-score">0000000</strong>
                 <div class="theme-row"><div class="theme-name"></div></div>
+                <button class="back-button" data-action="home"><span>⌂ TELA INICIAL</span></button>
                 <button class="back-button" data-action="select"><span>◀ TROCAR MESA</span></button>
                 <button id="coin-button-2" class="coin-button"><span>ADICIONAR FICHA</span><b>●</b></button>
                 <button id="restart-button" class="primary-button locked"><span>JOGAR DE NOVO</span><b>↗</b></button>

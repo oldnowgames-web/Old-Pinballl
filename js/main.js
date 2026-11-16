@@ -145,6 +145,10 @@ let PAL = THEME.pal;
 // ------------------------------------------------------------
 // Renderer / scene
 // ------------------------------------------------------------
+const QUALITY_KEY = 'oldPinballQuality_v1';
+const isMobileDevice = matchMedia('(pointer: coarse)').matches || Math.min(window.screen.width, window.screen.height) < 700;
+let lowQ = isMobileDevice;
+try { const q = localStorage.getItem(QUALITY_KEY); if (q) lowQ = q === 'low'; } catch (e) {}
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#1c130d');
 scene.fog = new THREE.FogExp2('#1c130d', 0.012);
@@ -153,8 +157,8 @@ const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
 camera.position.set(0, 17.5, 21.2);
 camera.lookAt(0, 0.25, -0.15);
 
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lowQ, alpha: false, powerPreference: 'high-performance' });
+renderer.setPixelRatio(lowQ ? 1 : Math.min(window.devicePixelRatio || 1, 1.7));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -1090,12 +1094,13 @@ function buildCards() {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'table-card' + (t.id === THEME.id ? ' current' : '');
     b.style.setProperty('--c', t.css.accent);
-    b.innerHTML = `<div class="card-img"><img src="images/${t.id}.png" alt="Mesa ${t.name}" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace(\'.png\',\'.jpg\')"><span class="glow"></span><span class="card-ball"></span><span class="shine"></span></div><div class="card-info"><b>${t.name}</b><small>${t.sub.split('•')[0].trim()}</small><span class="pick">ESCOLHER ▸</span></div>`;
+    b.innerHTML = `<div class="card-img"><img src="${(window.__IMG || {})[t.id] || 'images/' + t.id + '.png'}" alt="Mesa ${t.name}" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace(\'.png\',\'.jpg\')"><span class="glow"></span><span class="card-ball"></span><span class="shine"></span></div><div class="card-info"><b>${t.name}</b><small>${t.sub.split('•')[0].trim()}</small><span class="pick">ESCOLHER ▸</span></div>`;
     b.addEventListener('click', () => { applyTheme(t.id); ensureAudio(); sfx.tick(); showScreen('coin'); });
     box.appendChild(b);
   });
 }
 introEl.querySelector('#intro-button').addEventListener('click', () => { ensureAudio(); showScreen('select'); });
+document.querySelectorAll('[data-action="home"]').forEach((b) => b.addEventListener('click', () => goHome()));
 document.querySelectorAll('[data-action="select"]').forEach((b) => b.addEventListener('click', () => { if (!coinAnim) showScreen('select'); }));
 function refreshSoundUI() {
   const b = $('#sound-button'); if (!b) return;
@@ -1427,12 +1432,13 @@ function render() {
   if (Math.abs(camera.fov - wantFov) > 0.01) { camera.fov = wantFov; camera.updateProjectionMatrix(); }
   camera.position.set(cx, cy, cz);
   camera.lookAt(lx, ly, lz);
-  composer.render();
+  if (lowQ) renderer.render(scene, camera); else composer.render();
 }
 
 function animate(now) {
   requestAnimationFrame(animate);
   const dt = Math.min((now - lastTime) / 1000, 0.033); lastTime = now;
+  if (state === 'menu' && screen !== 'coin' && !coinAnim) return;   // menus cobrem o jogo: nao renderiza
   if (state === 'playing' || state === 'menu' || state === 'gameover') {
     const steps = Math.max(1, Math.ceil(dt / (1 / 240))), h = dt / steps;
     if (state === 'playing') for (let i = 0; i < steps; i++) physicsStep(h);
@@ -1587,6 +1593,18 @@ function buildThemePickers() {
 }
 ui.themeFooter.addEventListener('click', () => { if (state === 'menu' || state === 'gameover') showScreen('select'); });
 applyTheme(THEME.id, false);
+function applyQuality(low, save = false) {
+  lowQ = low;
+  if (save) { try { localStorage.setItem(QUALITY_KEY, low ? 'low' : 'high'); } catch (e) {} }
+  renderer.setPixelRatio(low ? 1 : Math.min(window.devicePixelRatio || 1, 1.7));
+  keyLight.castShadow = !low;
+  pinkFill.visible = !low; blueFill.visible = !low;
+  playfield.material.clearcoat = low ? 0 : 0.1; playfield.material.needsUpdate = true;
+  const qb = $('#quality-button'); if (qb) $('#quality-label').textContent = low ? 'GRÁFICO: LEVE' : 'GRÁFICO: ALTO';
+  resize();
+}
+$('#quality-button').addEventListener('click', () => applyQuality(!lowQ, true));
+applyQuality(lowQ);
 
 updateHud();
 resize();

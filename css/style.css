@@ -385,3 +385,26 @@ html{-webkit-text-size-adjust:100%}
 .card-img{aspect-ratio:3/4}
 .card-img img{object-position:center 40%}
 @media(orientation:landscape) and (max-height:520px){.card-img{aspect-ratio:4/5}}
+
+/* ---- desempenho: sem blur sobre o canvas ---- */
+.overlay-screen{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:radial-gradient(ellipse at center,rgba(var(--p2),.82),rgba(var(--p2),.95))}
+.back-button span{display:block}
+.back-button+.back-button{margin-top:-4px}
+.stage-toolbar{flex-wrap:wrap}
+.stage-toolbar .tool-btn:first-child{margin-right:auto}
+@media(pointer:coarse),(max-width:650px){
+  .card-img .glow,.card-img .shine{animation:none}
+  .card-img img{animation-duration:14s}
+  .tool-btn{padding:0 9px;font-size:7px;letter-spacing:.1em;min-height:40px}
+  .game-stage::before,.game-stage::after{display:none}
+}
+
+/* ---- splash minimalista ---- */
+.splash{background:#120b05}
+.splash-glow{background:radial-gradient(ellipse at 50% 45%,rgba(249,176,68,.16),transparent 60%);animation:none}
+.splash-content{padding:20px 18px;gap:0}
+.t-old{font-size:clamp(26px,5vw,52px);letter-spacing:.6em;margin-right:-.6em;text-shadow:none;color:#d9c29a}
+.t-pin{font-size:clamp(50px,13vw,150px);filter:none;animation:none;background:linear-gradient(180deg,#ffe3a0,#f0a23c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.splash-sub{margin:10px 0 44px;color:#8f7f63;letter-spacing:.35em}
+.splash-play{animation:none;box-shadow:none;border:0;background:#f0a23c;padding:clamp(14px,2vw,18px) clamp(40px,6vw,60px);font-size:clamp(16px,2.4vw,22px)}
+.splash-play:hover{background:#ffb852;filter:none}
